@@ -18,7 +18,7 @@ open class DockerfileTask : DefaultTask() {
         }
 
         dockerfiles.forEach { dockerfile ->
-            File("${localDir}/${dockerfile.name}-Dockerfile").writeText(dockerfile.context)
+            File(localDir,"${dockerfile.name}-Dockerfile").writeText(dockerfile.context)
         }
     }
 }
@@ -33,6 +33,15 @@ open class Dockerfile(val name: String) {
     lateinit var host: String
     lateinit var username: String
     lateinit var password: String
-    lateinit var serverDir: String
+    var serverDir: String = ""
+        set(value) {
+            field = if (!value.startsWith("/")) {
+                throw IllegalArgumentException("serverDir:${value}。请使用绝对路径")
+            } else if (!value.endsWith("/")) {
+                "${value}/"
+            } else {
+                value
+            }
+        }
     lateinit var context: String
 }
