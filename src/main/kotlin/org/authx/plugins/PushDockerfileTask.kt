@@ -23,30 +23,41 @@ open class PushDockerfileTask : DefaultTask() {
             val serverDir = dockerfile.serverDir
 
             val session = buildSession(dockerfile)
-            val channel = session.openChannel("sftp") as ChannelSftp
-            channel.connect()
+            val sftp = buildSftpChannel(session)
 
-            try {
-                channel.stat(serverDir)
-                channel.rm("${serverDir}*")
-            } catch (e: Exception) {
-                channel.mkdir(serverDir)
-            }
-            channel.put("${localDir}/${dockerfile.name}-Dockerfile", "${serverDir}/Dockerfile")
+            cleanServerDir(sftp, serverDir)
+            sftp.put("${localDir}/${dockerfile.name}-Dockerfile", "${serverDir}/Dockerfile")
 
-            channel.disconnect()
+            sftp.disconnect()
             session.disconnect()
+        }
+    }
+
+    private fun cleanServerDir(sftp: ChannelSftp, serverDir: String) {
+        try {
+            sftp.stat(serverDir)
+            sftp.rm("${serverDir}*")
+        } catch (e: Exception) {
+            sftp.mkdir(serverDir)
         }
     }
 
     private fun buildSession(dockerfile: Dockerfile): Session {
         val jsch = JSch()
+        println("尝试连接服务器${dockerfile.name},参数：[username= ${dockerfile.username} password = ${dockerfile.password} host = ${dockerfile.host}]")
         val session = jsch.getSession(dockerfile.username, dockerfile.host)
         session.setPassword(dockerfile.password)
         val config = Properties()
         config.put("StrictHostKeyChecking", "no")
         session.setConfig(config)
         session.connect()
+        println("成功连接服务器${dockerfile.name}")
         return session
+    }
+
+    private fun buildSftpChannel(session: Session): ChannelSftp {
+        val channel = session.openChannel("sftp") as ChannelSftp
+        channel.connect()
+        return channel
     }
 }

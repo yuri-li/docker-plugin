@@ -30,7 +30,13 @@ spring boot项目，尤其是spring cloud搭建的微服务，每个服务都需
 | connect docker host | 使用jsch连接linux                                 |
 | push dockerfile     | 上传dockerfile到`/opt/${project.name}/Dockerfile` |
 
+## 1.2 v0.2
 
+| 功能点               | 描述                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| push jar             | 上传本地的jar到linux                                         |
+| build docker image   | 通过dockerfile构建docker 镜像                                |
+| run docker container | 根据配置，可以同时创建多个docker容器（还要考虑端口、network等） |
 
 
 
