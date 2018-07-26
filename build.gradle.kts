@@ -8,9 +8,10 @@ group = "org.authx.plugins"
 version = "0.0.2"
 
 task<Wrapper>("local-wrapper") { //修改gradle的版本
-    gradleVersion = "4.8.1"
+    gradleVersion = "4.9"
 }
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 

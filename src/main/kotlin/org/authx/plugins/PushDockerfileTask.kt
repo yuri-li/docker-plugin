@@ -1,5 +1,6 @@
 package org.authx.plugins
 
+import com.jcraft.jsch.ChannelExec
 import com.jcraft.jsch.ChannelSftp
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
@@ -26,9 +27,11 @@ open class PushDockerfileTask : DefaultTask() {
             val sftp = buildSftpChannel(session)
 
             cleanServerDir(sftp, serverDir)
-            sftp.put("${localDir}/${dockerfile.name}-Dockerfile", "${serverDir}/Dockerfile")
-
+            sftp.put("${localDir}/${dockerfile.name}-Dockerfile", "${serverDir}Dockerfile")
+            sftp.put("${project.buildDir}/libs/${project.name}-${project.version}.jar", serverDir)
             sftp.disconnect()
+
+            buildDockerContainer(session, serverDir)
             session.disconnect()
         }
     }
@@ -59,5 +62,15 @@ open class PushDockerfileTask : DefaultTask() {
         val channel = session.openChannel("sftp") as ChannelSftp
         channel.connect()
         return channel
+    }
+
+    private fun buildDockerContainer(session: Session, serverDir: String) {
+        val channel = session.openChannel("exec") as ChannelExec
+        //build docker image
+        channel.setCommand("cd ${serverDir} && docker image build --no-cache -t ${project.name}:${project.version} ./ && docker image ls --filter name=${project.name}")
+        //run docker container
+        //
+        channel.connect()
+        channel.disconnect()
     }
 }
