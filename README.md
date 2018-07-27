@@ -42,3 +42,22 @@ spring boot项目，尤其是spring cloud搭建的微服务，每个服务都需
 
 # 2 使用插件
 
+```
+[root@yuri ~]# vim /etc/selinux/config 
+```
+
+```
+SELINUX=disabled
+```
+
+```
+[root@yuri /]# reboot now
+```
+
+![1532702986652](/1532702986652.png)
+
+
+
+
+
+![1532703078080](/1532703078080.png)
