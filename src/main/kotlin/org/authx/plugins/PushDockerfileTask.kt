@@ -7,6 +7,7 @@ import com.jcraft.jsch.Session
 import org.gradle.api.DefaultTask
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.tasks.TaskAction
+import java.io.BufferedReader
 import java.io.File
 import java.util.*
 
@@ -65,12 +66,18 @@ open class PushDockerfileTask : DefaultTask() {
     }
 
     private fun buildDockerContainer(session: Session, serverDir: String) {
-        val channel = session.openChannel("exec") as ChannelExec
-        //build docker image
-        channel.setCommand("cd ${serverDir} && docker image build --no-cache -t ${project.name}:${project.version} ./ && docker image ls --filter name=${project.name}")
-        //run docker container
-        //
-        channel.connect()
-        channel.disconnect()
+        execCommand(session,
+                "cd ${serverDir} && docker image build --no-cache -t ${project.name}:${project.version} ./ && docker image ls --filter name=${project.name}",
+                "docker run -d --name ${project.name} -p 8080:8080 --mount source=app,target=/app ${project.name}:${project.version}")
+    }
+
+    private fun execCommand(session: Session, vararg commands: String) {
+        commands.forEach {
+            val channel = session.openChannel("exec") as ChannelExec
+            channel.setCommand(it)
+            channel.connect()
+            println(channel.inputStream.bufferedReader().use(BufferedReader::readText))
+            channel.disconnect()
+        }
     }
 }

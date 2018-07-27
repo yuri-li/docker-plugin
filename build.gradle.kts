@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.authx.plugins"
-version = "0.0.2"
+version = "0.0.1"
 
 task<Wrapper>("local-wrapper") { //修改gradle的版本
     gradleVersion = "4.9"

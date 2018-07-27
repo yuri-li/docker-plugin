@@ -6,4 +6,3 @@ pluginManagement {
     }
 }
 rootProject.name = "docker-plugin"
-

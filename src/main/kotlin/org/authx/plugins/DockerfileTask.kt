@@ -18,7 +18,7 @@ open class DockerfileTask : DefaultTask() {
         }
 
         dockerfiles.forEach { dockerfile ->
-            File(localDir,"${dockerfile.name}-Dockerfile").writeText(dockerfile.context)
+            File(localDir,"${dockerfile.name}-Dockerfile").writeText(dockerfile.context.trimIndent())
         }
     }
 }
