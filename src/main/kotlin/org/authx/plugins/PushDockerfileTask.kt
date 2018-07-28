@@ -67,6 +67,9 @@ open class PushDockerfileTask : DefaultTask() {
 
     private fun buildDockerContainer(session: Session, serverDir: String) {
         execCommand(session,
+                "docker stop ${project.name}", //停止容器
+                "docker rm ${project.name}", //删除容器
+                "docker image rm $(docker image ls --filter=reference='springboot-kotlin:*' -q)", //删除镜像
                 "cd ${serverDir} && docker image build --no-cache -t ${project.name}:${project.version} ./ && docker image ls --filter name=${project.name}",
                 "docker run -d --name ${project.name} -p 8080:8080 --mount source=app,target=/app ${project.name}:${project.version}")
     }
