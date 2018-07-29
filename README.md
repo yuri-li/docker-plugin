@@ -1,9 +1,3 @@
----
-typora-root-url: docs\images
----
-
-
-
 # 1 插件开发过程
 
 spring boot项目，尤其是spring cloud搭建的微服务，每个服务都需要发布至少一个节点。如果发布多个节点，且使用docker，需要敲一堆的命令。
@@ -18,7 +12,7 @@ spring boot项目，尤其是spring cloud搭建的微服务，每个服务都需
 
 
 
-![使用插件后，project的构建过程](/1532399005841.png)
+![使用插件后，project的构建过程](./docs/images/1532399005841.png)
 
 
 
@@ -38,7 +32,7 @@ spring boot项目，尤其是spring cloud搭建的微服务，每个服务都需
 | build docker image   | 通过dockerfile构建docker 镜像 |
 | run docker container | 运行1个docker容器             |
 
-![1532612961283](/1532612961283.png)
+![1532612961283](./docs/images/1532612961283.png)
 
 # 2 使用插件
 
@@ -54,10 +48,10 @@ SELINUX=disabled
 [root@yuri /]# reboot now
 ```
 
-![1532702986652](/1532702986652.png)
+![1532702986652](./docs/images/1532702986652.png)
 
 
 
 
 
-![1532703078080](/1532703078080.png)
+![1532703078080](./docs/images/1532703078080.png)
