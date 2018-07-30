@@ -32,26 +32,51 @@ spring boot项目，尤其是spring cloud搭建的微服务，每个服务都需
 | build docker image   | 通过dockerfile构建docker 镜像 |
 | run docker container | 运行1个docker容器             |
 
-![1532612961283](./docs/images/1532612961283.png)
-
 # 2 使用插件
 
-```
-[root@yuri ~]# vim /etc/selinux/config 
-```
+## 2.1 指定插件的仓库
+
+自定义的插件，自然是push到了本地的仓库。需要单独配置
+
+修改`settings.gradle.kts`
 
 ```
-SELINUX=disabled
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = "springboot-kotlin"
 ```
 
+## 2.2 import plugin
+
+配置`build.gradle.kts`
+
 ```
-[root@yuri /]# reboot now
+plugins {
+    id("org.authx.plugins.docker-plugin") version("0.0.2")
+}
 ```
 
-![1532702986652](./docs/images/1532702986652.png)
+> 新版本的gradle，尤其是使用kotlin的脚本，推荐使用这种配置方式。
+>
+> 其中，
+>
+> - 每个插件都需要唯一的id
+> - 声明一次即可，不需要重复命令：`apply<XXXPlugin>（）`
+
+## 2.3 重新构建项目
+
+构建完成后，在view gradle中，会新增两个自定义的task。如下：
+
+![1532920066041](./docs/images/1532920066041.png)
 
 
 
+## 2.4 publish的过程
 
-
-![1532703078080](./docs/images/1532703078080.png)
+详情见`docs/v${version}.md`，里面有具体的操作

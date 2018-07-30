@@ -11,7 +11,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.util.*
 
-open class PushDockerfileTask : DefaultTask() {
+open class PublishTask : DefaultTask() {
     lateinit var localDir: String
     lateinit var dockerfiles: NamedDomainObjectContainer<Dockerfile>
 

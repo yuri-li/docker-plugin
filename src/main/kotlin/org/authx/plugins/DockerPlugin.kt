@@ -26,7 +26,7 @@ open class DockerPlugin : Plugin<Project> {
                 }
             }
         }
-        task("push-dockerfile", PushDockerfileTask::class) {
+        task("publish", PublishTask::class) {
             group = "docker"
 
             doFirst {
